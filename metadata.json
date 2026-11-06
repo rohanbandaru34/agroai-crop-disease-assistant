@@ -1,0 +1,6 @@
+{
+  "name": "AgroAI — AI Crop Disease Diagnosis & Management",
+  "description": "Intelligent agricultural assistant for crop disease diagnosis, symptom recognition, and actionable crop management recommendations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
