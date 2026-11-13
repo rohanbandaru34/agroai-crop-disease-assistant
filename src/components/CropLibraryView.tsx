@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { CROPS_DATA, DISEASES } from '../data/cropsData';
 import { Crop, CropCategory, Disease } from '../types';
+import { CropImage } from './CropImage';
 
 interface CropLibraryViewProps {
   onSelectCrop: (crop: Crop) => void;
@@ -27,12 +28,12 @@ interface CropLibraryViewProps {
 
 const CROP_CATEGORIES: ('All' | CropCategory)[] = [
   'All',
-  'Cereals',
+  'Cereals and Millets',
   'Pulses',
-  'Vegetables',
-  'Fruits',
+  'Commercial and Cash Crops',
   'Oilseeds',
-  'Cash crops',
+  'Fruits',
+  'Vegetables',
 ];
 
 const DISEASE_TYPES: ('All' | Disease['type'])[] = [
@@ -352,14 +353,12 @@ export const CropLibraryView: React.FC<CropLibraryViewProps> = ({
               <div>
                 {/* Crop Photo with Category Badge */}
                 <div className="aspect-16/10 w-full overflow-hidden bg-[#EAE6DA] relative">
-                  <img
-                    src={crop.imageUrl}
-                    alt={crop.name}
+                  <CropImage
+                    crop={crop}
                     className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
+                    containerClassName="w-full h-full relative"
                   />
-                  <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded">
+                  <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded pointer-events-none z-10">
                     {crop.category}
                   </div>
                 </div>

@@ -1,4 +1,13 @@
-export type CropCategory = 'Cereals' | 'Pulses' | 'Vegetables' | 'Fruits' | 'Oilseeds' | 'Cash crops';
+export type CropCategory =
+  | 'Cereals and Millets'
+  | 'Pulses'
+  | 'Commercial and Cash Crops'
+  | 'Oilseeds'
+  | 'Fruits'
+  | 'Vegetables'
+  | 'Cereals'
+  | 'Cash crops';
+
 
 export interface ChemicalManagementInfo {
   verifiedActives: string[];
@@ -73,12 +82,21 @@ export interface CommonDiseaseSummary {
   diseaseId?: string;
 }
 
-export interface Crop {
+export interface CropImageMetadata {
+  image: string;
+  imageAlt: string;
+  imageSource: string;
+  imageCredit: string;
+  imageLicense: string;
+}
+
+export interface Crop extends CropImageMetadata {
   id: string;
   name: string;
   botanicalName: string;
+  scientificName?: string;
   category: CropCategory;
-  imageUrl: string;
+  imageUrl?: string;
   shortDescription: string;
   detailedOverview: string;
   growingSeason: string;

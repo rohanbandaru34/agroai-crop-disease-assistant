@@ -18,8 +18,12 @@ import {
   ChevronRight,
   Sprout,
   Info,
+  BookOpen,
+  Scissors,
+  AlertCircle,
 } from 'lucide-react';
 import { Crop } from '../types';
+import { CropImage } from './CropImage';
 
 interface CropDetailViewProps {
   crop: Crop;
@@ -34,9 +38,11 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
   onAskAboutCrop,
   onSelectDisease,
 }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'requirements' | 'diseases' | 'pests' | 'prevention'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    'overview' | 'conditions' | 'cultivation' | 'growth' | 'diseases' | 'pests' | 'deficiencies' | 'harvest'
+  >('overview');
 
-  const defaultAskQuery = `I need agronomic advice for my ${crop.name} (${crop.botanicalName}) crop. What are the key disease and pest risks to watch out for right now?`;
+  const defaultAskQuery = `I need agronomic advice for my ${crop.name} (${crop.botanicalName}) crop. What are the key disease, pest, and fertilization recommendations?`;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-28">
@@ -59,15 +65,15 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
       {/* Hero Showcase Card */}
       <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-2xl overflow-hidden shadow-sm">
         <div className="grid grid-cols-1 md:grid-cols-12 items-stretch">
-          {/* Crop Photograph */}
-          <div className="md:col-span-5 relative bg-[#EAE6DA] min-h-[300px] md:min-h-full">
-            <img
-              src={crop.imageUrl}
-              alt={crop.name}
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
+          {/* Crop Photograph with Independent Attribution */}
+          <div className="md:col-span-5 relative bg-[#EAE6DA] min-h-[300px] md:min-h-full flex flex-col justify-between">
+            <CropImage
+              crop={crop}
+              className="w-full h-full object-cover min-h-[280px]"
+              containerClassName="w-full h-full relative flex flex-col justify-between"
+              showAttribution={true}
             />
-            <div className="absolute top-4 left-4 flex items-center gap-2">
+            <div className="absolute top-4 left-4 flex items-center gap-2 pointer-events-none z-10">
               <span className="bg-black/60 backdrop-blur-xs text-white text-xs font-semibold px-3 py-1 rounded-md">
                 {crop.category}
               </span>
@@ -79,7 +85,7 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
             <div className="space-y-3">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-[#3B7E58]">
-                  Crop Profile & Pathology Guide
+                  Comprehensive Agronomy & Pathology Repository
                 </span>
                 <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#142A1D] mt-1">
                   {crop.name}
@@ -141,13 +147,17 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
         </div>
       </div>
 
-      {/* Internal Navigation Anchor Tabs */}
+      {/* Internal Navigation Anchor Tabs (8 Comprehensive Sections) */}
       <div className="flex border-b border-[#E0DBCF] gap-2 sm:gap-6 text-xs sm:text-sm font-semibold overflow-x-auto scrollbar-none pb-0.5">
         {[
-          { id: 'overview', label: 'Overview & Requirements' },
-          { id: 'diseases', label: `Common Diseases (${crop.commonDiseases?.length || crop.keyDiseases?.length || 0})` },
-          { id: 'pests', label: `Common Pests (${crop.commonPests?.length || 0})` },
-          { id: 'prevention', label: 'Preventive Practices' },
+          { id: 'overview', label: '1. Overview' },
+          { id: 'conditions', label: '2. Growing Conditions' },
+          { id: 'cultivation', label: '3. Cultivation Guide' },
+          { id: 'growth', label: '4. Growth Stages' },
+          { id: 'diseases', label: `5. Diseases (${crop.commonDiseases?.length || crop.keyDiseases?.length || 0})` },
+          { id: 'pests', label: `6. Pests (${crop.commonPests?.length || 0})` },
+          { id: 'deficiencies', label: '7. Nutrient Deficiencies' },
+          { id: 'harvest', label: '8. Harvesting' },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -163,8 +173,55 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
         ))}
       </div>
 
-      {/* Tab 1: Overview & Growing Requirements */}
+      {/* Tab 1: Overview */}
       {activeTab === 'overview' && (
+        <div className="space-y-6">
+          <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-2xl p-6 sm:p-8 space-y-4 shadow-2xs">
+            <div className="flex items-center gap-2.5 text-[#173827]">
+              <BookOpen className="w-5 h-5 text-[#295C42]" />
+              <h3 className="font-serif text-xl font-bold">Crop Overview & Economic Importance</h3>
+            </div>
+            <p className="text-sm sm:text-base text-[#3E4D43] leading-relaxed">
+              {crop.detailedOverview}
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-[#EAE6DA]">
+              <div className="p-4 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
+                <span className="text-xs uppercase font-bold text-[#68786E]">Botanical Family & Name</span>
+                <p className="font-serif font-bold text-[#142A1D]">{crop.name} ({crop.botanicalName})</p>
+              </div>
+              <div className="p-4 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
+                <span className="text-xs uppercase font-bold text-[#68786E]">Agronomic Category</span>
+                <p className="font-serif font-bold text-[#142A1D]">{crop.category}</p>
+              </div>
+            </div>
+          </div>
+
+          {crop.agronomyTips && crop.agronomyTips.length > 0 && (
+            <div className="bg-[#FAF8F2] border border-[#E2DDD0] rounded-2xl p-6 sm:p-7 space-y-4 shadow-2xs">
+              <div className="flex items-center gap-2 text-[#173827]">
+                <Sparkles className="w-5 h-5 text-[#295C42]" />
+                <h3 className="font-serif text-lg font-bold">Key Agronomic Highlights</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                {crop.agronomyTips.map((tip, idx) => (
+                  <div key={idx} className="bg-white border border-[#E5E0D2] rounded-xl p-4 space-y-2 shadow-2xs">
+                    <div className="w-6 h-6 rounded-full bg-[#E8EFE9] text-[#193B28] flex items-center justify-center text-xs font-bold">
+                      {idx + 1}
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#3E4D43] leading-relaxed">
+                      {tip}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab 2: Growing Conditions */}
+      {activeTab === 'conditions' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Climate Requirements */}
@@ -185,7 +242,7 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
                 <div className="p-3.5 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
                   <span className="font-bold text-[#142A1D] block">Rainfall & Precipitation:</span>
                   <p className="text-[#4E5D53] leading-relaxed">
-                    {crop.climateRequirements?.rainfall || '500–800 mm uniformly distributed across growth stages'}
+                    {crop.climateRequirements?.rainfall || '500–800 mm uniformly distributed'}
                   </p>
                 </div>
 
@@ -232,7 +289,7 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
                 <div className="p-3.5 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
                   <span className="font-bold text-[#142A1D] block">Drainage & Aeration:</span>
                   <p className="text-[#4E5D53] leading-relaxed">
-                    {crop.soilRequirements?.drainage || 'Excellent internal and surface drainage required; avoid waterlogging'}
+                    {crop.soilRequirements?.drainage || 'Excellent internal and surface drainage required'}
                   </p>
                 </div>
 
@@ -258,32 +315,87 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
               {crop.waterRequirement}
             </p>
           </div>
-
-          {/* Agronomy Quick Field Tips */}
-          {crop.agronomyTips && crop.agronomyTips.length > 0 && (
-            <div className="bg-[#FAF8F2] border border-[#E2DDD0] rounded-2xl p-6 sm:p-7 space-y-4 shadow-2xs">
-              <div className="flex items-center gap-2 text-[#173827]">
-                <Sparkles className="w-5 h-5 text-[#295C42]" />
-                <h3 className="font-serif text-lg font-bold">Field Agronomy Best Practices</h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-                {crop.agronomyTips.map((tip, idx) => (
-                  <div key={idx} className="bg-white border border-[#E5E0D2] rounded-xl p-4 space-y-2 shadow-2xs">
-                    <div className="w-6 h-6 rounded-full bg-[#E8EFE9] text-[#193B28] flex items-center justify-center text-xs font-bold">
-                      {idx + 1}
-                    </div>
-                    <p className="text-xs sm:text-sm text-[#3E4D43] leading-relaxed">
-                      {tip}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       )}
 
-      {/* Tab 2: Common Diseases */}
+      {/* Tab 3: Cultivation Guide */}
+      {activeTab === 'cultivation' && (
+        <div className="space-y-6">
+          <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-2xl p-6 sm:p-8 space-y-5 shadow-2xs">
+            <div className="flex items-center gap-2.5 text-[#173827]">
+              <Sprout className="w-5 h-5 text-[#295C42]" />
+              <h3 className="font-serif text-xl font-bold">Cultivation & Field Management Practices</h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+              <div className="p-4 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
+                <span className="font-bold text-[#142A1D] block">Growing Season & Sowing Window:</span>
+                <p className="text-[#4E5D53]">{crop.growingSeason}</p>
+              </div>
+              <div className="p-4 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
+                <span className="font-bold text-[#142A1D] block">Crop Duration to Maturity:</span>
+                <p className="text-[#4E5D53]">{crop.harvestWindowDays}</p>
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              <h4 className="font-bold text-xs uppercase tracking-wider text-[#193B28]">
+                Recommended Preventive & Cultural Practices:
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {crop.preventivePractices && crop.preventivePractices.length > 0 ? (
+                  crop.preventivePractices.map((prev, idx) => (
+                    <div key={idx} className="bg-white border border-[#E5E0D2] rounded-xl p-4 flex items-start gap-3 shadow-2xs">
+                      <div className="w-6 h-6 rounded-full bg-[#E8EFE9] text-[#193B28] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                        {idx + 1}
+                      </div>
+                      <p className="text-xs sm:text-sm text-[#38483E] leading-relaxed">{prev}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-2 p-4 bg-white border border-[#E5E0D2] rounded-xl text-xs text-[#526257]">
+                    Follow certified seed dressing and balanced NPK fertilizer recommendations based on local soil testing.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 4: Growth Stages */}
+      {activeTab === 'growth' && (
+        <div className="space-y-6">
+          <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-2xl p-6 sm:p-8 space-y-5 shadow-2xs">
+            <div className="flex items-center gap-2.5 text-[#173827]">
+              <Clock className="w-5 h-5 text-[#295C42]" />
+              <h3 className="font-serif text-xl font-bold">Crop Lifecycle & Growth Stages</h3>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                { stage: '1. Sowing & Germination', desc: 'Seed imbibition, radicle emergence, and seedling establishment.' },
+                { stage: '2. Vegetative Growth & Tillering', desc: 'Rapid leaf canopy expansion, root branching, and structural biomass accumulation.' },
+                { stage: '3. Flowering & Pollination', desc: 'Inflorescence emergence, anthesis, and fertilization. Critical moisture sensitivity.' },
+                { stage: '4. Fruiting / Grain Formation', desc: 'Nutrient translocation, pod or grain filling, and dry matter accumulation.' },
+                { stage: '5. Maturity & Harvesting', desc: 'Moisture dry-down, physiological maturity, and optimum harvest readiness.' },
+              ].map((item, idx) => (
+                <div key={idx} className="p-4 bg-white border border-[#E5E0D2] rounded-xl flex items-start gap-4 shadow-2xs">
+                  <div className="w-7 h-7 rounded-full bg-[#193B28] text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                    {idx + 1}
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-sm text-[#142A1D]">{item.stage}</h4>
+                    <p className="text-xs sm:text-sm text-[#4E5C53] leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 5: Common Diseases */}
       {activeTab === 'diseases' && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -357,7 +469,7 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
         </div>
       )}
 
-      {/* Tab 3: Common Pests */}
+      {/* Tab 6: Common Pests */}
       {activeTab === 'pests' && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -412,18 +524,6 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
                       {pest.management}
                     </p>
                   </div>
-
-                  <div className="pt-1">
-                    <button
-                      onClick={() =>
-                        onAskAboutCrop(`What are the economic threshold levels and organic controls for ${pest.name} in ${crop.name}?`)
-                      }
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#193B28] hover:underline cursor-pointer"
-                    >
-                      <span>Consult AgroAI on {pest.name}</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
                 </div>
               ))
             ) : (
@@ -435,55 +535,62 @@ export const CropDetailView: React.FC<CropDetailViewProps> = ({
         </div>
       )}
 
-      {/* Tab 4: Disease Prevention Information */}
-      {activeTab === 'prevention' && (
+      {/* Tab 7: Nutrient Deficiencies */}
+      {activeTab === 'deficiencies' && (
         <div className="space-y-6">
           <div className="flex items-center gap-2.5">
-            <ShieldCheck className="w-5 h-5 text-[#204B34]" />
+            <AlertCircle className="w-5 h-5 text-amber-700" />
             <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#142A1D]">
-              Preventive Practices & Cultural Plant Health for {crop.name}
+              Nutrient Deficiencies & Physiological Disorders
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {crop.preventivePractices && crop.preventivePractices.length > 0 ? (
-              crop.preventivePractices.map((prev, idx) => (
-                <div
-                  key={idx}
-                  className="bg-white border border-[#E5E0D2] rounded-xl p-4.5 flex items-start gap-3.5 shadow-2xs"
-                >
-                  <div className="w-7 h-7 rounded-full bg-[#E8EFE9] text-[#193B28] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                    {idx + 1}
-                  </div>
-                  <p className="text-xs sm:text-sm text-[#38483E] leading-relaxed">
-                    {prev}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <div className="col-span-2 p-6 rounded-xl bg-white border border-[#E5E0D2] text-sm text-[#546459]">
-                Standard preventive practices include using certified disease-free seeds and rotating crops with non-host species.
-              </div>
-            )}
-          </div>
-
-          {/* Deep Consult CTA box */}
-          <div className="p-6 rounded-2xl bg-[#EFECE3] border border-[#DDD6C7] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="space-y-1 text-center sm:text-left">
-              <h4 className="font-serif text-base font-bold text-[#142A1D]">
-                Need a customized seasonal prevention schedule for your {crop.name} acreage?
-              </h4>
-              <p className="text-xs text-[#526257]">
-                Ask AgroAI for weather-adapted fungicide timing, organic soil amendments, or certified resistant varieties.
-              </p>
+            <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-xl p-5 space-y-2 shadow-2xs">
+              <h4 className="font-bold text-sm text-[#142A1D]">Nitrogen (N) Deficiency</h4>
+              <p className="text-xs sm:text-sm text-[#4E5C53]">Uniform pale yellowing (chlorosis) of older leaves due to impaired protein synthesis. Corrective measure: Apply split doses of urea or ammonium sulfate.</p>
             </div>
-            <button
-              onClick={() => onAskAboutCrop(defaultAskQuery)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-[#193B28] hover:bg-[#11281B] transition-colors shrink-0 cursor-pointer shadow-xs"
-            >
-              <MessageSquare className="w-4 h-4 text-[#A3C5A7]" />
-              <span>Ask AgroAI about this crop</span>
-            </button>
+            <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-xl p-5 space-y-2 shadow-2xs">
+              <h4 className="font-bold text-sm text-[#142A1D]">Phosphorus (P) Deficiency</h4>
+              <p className="text-xs sm:text-sm text-[#4E5C53]">Stunted growth with dark green or purplish discoloration on older leaves and stems. Corrective measure: Apply basal single superphosphate (SSP).</p>
+            </div>
+            <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-xl p-5 space-y-2 shadow-2xs">
+              <h4 className="font-bold text-sm text-[#142A1D]">Potassium (K) Deficiency</h4>
+              <p className="text-xs sm:text-sm text-[#4E5C53]">Marginal chlorosis and scorching (firing) on older leaves. Corrective measure: Apply muriate of potash or foliar spray 1% KNO3.</p>
+            </div>
+            <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-xl p-5 space-y-2 shadow-2xs">
+              <h4 className="font-bold text-sm text-[#142A1D]">Zinc (Zn) Deficiency</h4>
+              <p className="text-xs sm:text-sm text-[#4E5C53]">Interveinal chlorosis, shortened internodes (rosetting), and small mottled leaves. Corrective measure: Foliar spray of 0.5% zinc sulfate.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 8: Harvesting */}
+      {activeTab === 'harvest' && (
+        <div className="space-y-6">
+          <div className="bg-[#FCFAF6] border border-[#E2DDD0] rounded-2xl p-6 sm:p-8 space-y-5 shadow-2xs">
+            <div className="flex items-center gap-2.5 text-[#173827]">
+              <Scissors className="w-5 h-5 text-[#295C42]" />
+              <h3 className="font-serif text-xl font-bold">Harvesting Indicators & Post-Harvest Handling</h3>
+            </div>
+
+            <div className="space-y-3 text-xs sm:text-sm text-[#3E4C42]">
+              <div className="p-4 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
+                <span className="font-bold text-[#142A1D] block">Crop Duration:</span>
+                <p className="text-[#4E5D53]">{crop.harvestWindowDays}</p>
+              </div>
+
+              <div className="p-4 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
+                <span className="font-bold text-[#142A1D] block">Maturity Indicators:</span>
+                <p className="text-[#4E5D53]">Physiological maturity is reached when grain/fruit moisture drops to optimum levels, color changes uniformly, and abscission layers form.</p>
+              </div>
+
+              <div className="p-4 bg-white border border-[#E5E0D2] rounded-xl space-y-1">
+                <span className="font-bold text-[#142A1D] block">Post-Harvest Storage & Handling:</span>
+                <p className="text-[#4E5D53]">Sun-dry produce to safe storage moisture limits (10%–12% for grains/pulses) before bagging in hermetic Purdue bags or clean silos to prevent insect weevil damage.</p>
+              </div>
+            </div>
           </div>
         </div>
       )}
