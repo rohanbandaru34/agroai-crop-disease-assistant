@@ -7,37 +7,37 @@ export const CROP_CATEGORIES = [
   {
     id: 'cereals-and-millets',
     name: 'Cereals and Millets' as CropCategory,
-    image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=1000&q=80',
+    image: 'https://t4.ftcdn.net/jpg/04/09/40/01/240_F_409400136_126qrp5OZ7YaVGhFXpWZabMDiEOTvyNn.jpg',
     count: 6,
   },
   {
     id: 'pulses',
     name: 'Pulses' as CropCategory,
-    image: 'https://images.unsplash.com/photo-1515543904379-3d077afe72e5?auto=format&fit=crop&w=1000&q=80',
+    image: 'https://t3.ftcdn.net/jpg/04/42/34/66/240_F_442346615_Txxr1SLA8Iu8tNVBgnpv0Wbr0Ltq8cHk.jpg',
     count: 6,
   },
   {
     id: 'commercial-and-cash-crops',
     name: 'Commercial and Cash Crops' as CropCategory,
-    image: 'https://images.unsplash.com/photo-1599813351988-c7e63b3641b9?auto=format&fit=crop&w=1000&q=80',
+    image: 'https://t3.ftcdn.net/jpg/20/83/41/18/240_F_2083411866_DIBaeZNV8ZfELj6Z4QKRJlW9943pJhx5.jpg',
     count: 4,
   },
   {
     id: 'oilseeds',
     name: 'Oilseeds' as CropCategory,
-    image: 'https://images.unsplash.com/photo-1563532375-f93805972ad6?auto=format&fit=crop&w=1000&q=80',
+    image: 'https://t3.ftcdn.net/jpg/02/08/98/52/240_F_208985230_0jgPqmeQ0GffdcwA0zkXxf2RwkoLb4OR.jpg',
     count: 5,
   },
   {
     id: 'fruits',
     name: 'Fruits' as CropCategory,
-    image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=1000&q=80',
+    image: 'https://t3.ftcdn.net/jpg/01/74/79/72/240_F_174797288_1APxqZMKB2IRL0NQqsNIJLr7Y08Vu33m.jpg',
     count: 3,
   },
   {
     id: 'vegetables',
     name: 'Vegetables' as CropCategory,
-    image: 'https://images.unsplash.com/photo-1592841202223-ca33cfd9faa6?auto=format&fit=crop&w=1000&q=80',
+    image: 'https://t4.ftcdn.net/jpg/03/20/39/89/240_F_320398931_CO8r6ymeSFqeoY1cE6P8dbSGRYiAYj4a.jpg',
     count: 9,
   },
 ];
