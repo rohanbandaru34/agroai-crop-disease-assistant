@@ -39,8 +39,8 @@ AgroAI is an AI-powered agricultural assistant designed to help farmers, agronom
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/rohanbandaru34/agroai.git
-cd agroai
+git clone https://github.com/rohanbandaru34/agroai-crop-disease-assistant.git
+cd agroai-crop-disease-assistant
 ```
 
 ### 2. Install Dependencies
