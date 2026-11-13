@@ -28,6 +28,7 @@ export default function App() {
     setActiveTab(tab);
     setSelectedCrop(null);
     setSelectedDisease(null);
+    setAssistantInitialQuery(undefined);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -35,9 +36,7 @@ export default function App() {
     setActiveTab('assistant');
     setSelectedCrop(null);
     setSelectedDisease(null);
-    if (query) {
-      setAssistantInitialQuery(query);
-    }
+    setAssistantInitialQuery(query || undefined);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

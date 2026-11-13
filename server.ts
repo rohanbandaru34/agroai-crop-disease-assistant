@@ -377,9 +377,9 @@ app.post('/api/diagnose', async (req: Request, res: Response, next: NextFunction
         }
 
         const modelsToTry = [
+          'gemini-3.5-flash-lite',
           'gemini-3.8-flash',
-          'gemini-3.7-flash',
-          'gemini-3.5-flash-lite'
+          'gemini-3.7-flash'
         ];
 
         for (const modelName of modelsToTry) {

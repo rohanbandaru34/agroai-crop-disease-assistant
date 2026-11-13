@@ -252,67 +252,8 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
   onOpenCropDetail,
   initialQuestion,
 }) => {
-  const initialMessages: ChatMessage[] = [
-    {
-      id: 'msg-1',
-      sender: 'user',
-      timestamp: 'Just now',
-      text: 'My tomato plant leaves have brown spots and are turning yellow.',
-    },
-    {
-      id: 'msg-2',
-      sender: 'assistant',
-      timestamp: 'Just now',
-      text: `### 1. Possible Diagnosis
-**Early Blight** (*Alternaria solani*) — Fungal Disease.
-
-### 2. Confidence & Uncertainty Explanation
-**High Likelihood (Estimated ~92% Pattern Match)**. Circular lesions with target-like concentric rings starting on lower leaves are hallmark signs of Early Blight. If spots are irregular and lack concentric rings, Late Blight or Septoria should be considered.
-
-### 3. Symptoms Extracted
-- **Crop**: Tomato (*Solanum lycopersicum*)
-- **Affected Plant Part**: Foliage (older lower leaves)
-- **Observed Symptoms**: Dark brown circular spots with concentric rings, chlorotic yellow halos
-- **Severity**: Early to moderate vegetative progression
-- **Environmental Factors**: Warm conditions with high humidity or foliage wetness
-
-### 4. Why This Disease Matches
-*Alternaria solani* produces brown necrotic spots with characteristic target rings due to diurnal fungal spore growth cycles. The yellow halo represents toxic cellular breakdown before the leaf defoliates.
-
-### 5. Recommended Next Steps
-- Prune off and destroy infected lower leaves immediately (do not compost).
-- Cease overhead watering; irrigate strictly at the soil base or use drip irrigation.
-- Disinfect shears in 10% bleach solution between plant cuts.
-
-### 6. Prevention & Sustainable Management
-- Apply organic straw mulch around bases to prevent spore-laden soil from splashing onto leaves.
-- Ensure 45–60 cm plant spacing and stake vines to improve canopy air circulation.
-- Consult your local extension office for approved copper-based or bio-fungicide protective sprays.`,
-      diagnosisCard: {
-        diseaseId: 'early-blight-tomato',
-        diseaseName: 'Early Blight',
-        cropName: 'Tomato',
-        description: 'Caused by a fungus, it leads to brown spots with concentric rings and yellowing of leaves.',
-        imageUrl: '/src/assets/images/disease_early_blight_1793973952649.jpg',
-        confidence: 'Likely Match • 92%',
-        recommendedActions: [
-          'Remove affected leaves and dispose them.',
-          'Avoid overhead irrigation.',
-          'Improve air circulation.',
-          'Consider approved fungicides if severe.',
-        ],
-      },
-      actionChips: [
-        { label: 'What should I do first?', action: 'suggest_q', payload: 'What should I do first for early blight?' },
-        { label: 'How do I prevent spreading?', action: 'suggest_q', payload: 'How do I prevent early blight from spreading to nearby plants?' },
-        { label: 'Can it affect nearby plants?', action: 'suggest_q', payload: 'Can early blight affect nearby plants?' },
-        { label: 'How long does recovery take?', action: 'suggest_q', payload: 'How long does recovery usually take from early blight?' },
-        { label: 'Full Management Guide (A–E)', action: 'view_report', payload: 'early-blight-tomato' },
-      ],
-    },
-  ];
-
-  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+  // Start with a completely clean, empty conversation
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [attachedImage, setAttachedImage] = useState<string | null>(null);
@@ -363,29 +304,23 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
   }, [messages, isTyping]);
 
+  // When an initial question is passed from an external link, populate the input without auto-submitting
   useEffect(() => {
     if (initialQuestion) {
-      handleSendMessage(initialQuestion);
+      setInputText(initialQuestion);
     }
   }, [initialQuestion]);
 
+  // Completely reset chat to empty state without generating fake responses
   const handleClear = () => {
-    setMessages([
-      {
-        id: `welcome-${Date.now()}`,
-        sender: 'assistant',
-        timestamp: 'Just now',
-        text: 'Hello! I am **AgroAI**, your AI crop pathology and disease diagnosis assistant.\n\nDescribe the symptoms you observe on your plants (e.g. leaf spots, yellowing, wilting, insect damage), mention the crop name, or upload a photo of the affected plant part.',
-        actionChips: [
-          { label: 'Tomato Leaf Spots', action: 'suggest_q', payload: 'My tomato leaves have brown spots. What could be wrong?' },
-          { label: 'Rice Yellowing', action: 'suggest_q', payload: 'Why are my rice leaves turning yellow?' },
-          { label: 'Potato Fungal Issues', action: 'suggest_q', payload: 'How can I prevent fungal diseases in my potato crop?' },
-        ],
-      },
-    ]);
+    setMessages([]);
+    setInputText('');
+    setAttachedImage(null);
     setApiError(null);
   };
 
@@ -509,7 +444,9 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
         actionChips: actionChips.slice(0, 5),
       };
 
-      setMessages((prev) => [...prev, botMessage]);
+      const finalMessages = [...updatedMessages, botMessage];
+      setMessages(finalMessages);
+      saveCurrentToHistory(finalMessages);
     } catch (err: any) {
       console.error('Diagnostic error:', err);
       setApiError(err.message || 'Unable to connect to diagnostic server.');
@@ -519,14 +456,14 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
         id: `asst-err-${Date.now()}`,
         sender: 'assistant',
         timestamp: 'Just now',
-        text: `### 1. Diagnostic Advisory Notice\nAgroAI diagnostic service encountered a temporary network delay: *${err.message}*.\n\n### 2. Immediate Recommended Field Practice\nIf observing foliar spots or yellowing:\n- Avoid overhead watering and prune damaged foliage.\n- Ensure adequate plant spacing and sunlight.\n- Inspect the underside of leaves with a hand lens for fungal mold or tiny insects.\n\nYou can click any suggested question below or browse our verified Crop Library.`,
+        text: `### 1. Diagnostic Advisory Notice\nAgroAI diagnostic service encountered a temporary network delay: *${err.message}*.\n\n### 2. Immediate Recommended Field Practice\nIf observing foliar spots or yellowing:\n- Avoid overhead watering and prune damaged foliage.\n- Ensure adequate plant spacing and sunlight.\n- Inspect the underside of leaves with a hand lens for fungal mold or tiny insects.\n\nYou can type your crop problem below or browse our verified Crop Library.`,
         actionChips: [
-          { label: 'Tomato Blight Protocol', action: 'suggest_q', payload: 'My tomato leaves have brown spots. What could be wrong?' },
-          { label: 'Rice Blast Protocol', action: 'suggest_q', payload: 'Why are my rice leaves turning yellow?' },
           { label: 'Explore Crop Library', action: 'open_library' },
         ],
       };
-      setMessages((prev) => [...prev, fallbackReply]);
+      const finalErrMessages = [...updatedMessages, fallbackReply];
+      setMessages(finalErrMessages);
+      saveCurrentToHistory(finalErrMessages);
     } finally {
       setIsTyping(false);
     }
@@ -587,14 +524,14 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
               <h2 className="text-base font-bold text-[#173827]">
                 Suggested Questions
               </h2>
-              <span className="text-xs text-[#738378] font-medium">Click to ask</span>
+              <span className="text-xs text-[#738378] font-medium">Click to populate</span>
             </div>
 
             <div className="space-y-2.5">
               {SUGGESTED_QUESTIONS.map((q, idx) => (
                 <button
                   key={idx}
-                  onClick={() => handleSendMessage(q)}
+                  onClick={() => setInputText(q)}
                   className="w-full text-left p-3.5 rounded-xl bg-[#EFECE3] hover:bg-[#E3EFE5] border border-[#E1DCcf] hover:border-[#BCD1C0] text-sm text-[#27342C] transition-all flex items-center justify-between group cursor-pointer"
                 >
                   <span className="pr-2 leading-snug">{q}</span>
@@ -603,61 +540,56 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
               ))}
             </div>
 
-            {/* Diagnostic Follow-Up Questions (Prompt Scenarios) */}
-            <div className="pt-2 border-t border-[#E8E4D9]">
-              <span className="text-xs font-semibold text-[#193B28] block mb-2 flex items-center gap-1.5">
-                <HelpCircle className="w-3.5 h-3.5 text-[#295C42]" />
-                <span>Follow-Up Inquiries (Context-Aware):</span>
-              </span>
-              <div className="space-y-1.5">
-                {[
-                  { q: 'What should I do first?', desc: 'Immediate 24–48h action plan' },
-                  { q: 'How do I prevent this from spreading?', desc: 'Containment & sanitation' },
-                  { q: 'Can this disease affect nearby plants?', desc: 'Cross-infection risks' },
-                  { q: 'How long does recovery usually take?', desc: 'Prognosis & growth timeline' },
-                ].map((item, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSendMessage(item.q)}
-                    className="w-full text-left p-2.5 rounded-lg bg-white hover:bg-[#F2EFE8] border border-[#DDD8CA] hover:border-[#193B28] transition-colors text-xs text-[#204B34] flex items-center justify-between group cursor-pointer"
-                  >
-                    <div>
-                      <span className="font-semibold block">{item.q}</span>
-                      <span className="text-[10px] text-[#637267]">{item.desc}</span>
-                    </div>
-                    <ArrowRight className="w-3 h-3 text-[#7A8F80] group-hover:text-[#193B28] shrink-0" />
-                  </button>
-                ))}
+            {/* Diagnostic Follow-Up Questions (Context-Aware during active chat) */}
+            {messages.length > 0 && (
+              <div className="pt-2 border-t border-[#E8E4D9]">
+                <span className="text-xs font-semibold text-[#193B28] block mb-2 flex items-center gap-1.5">
+                  <HelpCircle className="w-3.5 h-3.5 text-[#295C42]" />
+                  <span>Follow-Up Inquiries (Active Chat):</span>
+                </span>
+                <div className="space-y-1.5">
+                  {[
+                    { q: 'What should I do first?', desc: 'Immediate 24–48h action plan' },
+                    { q: 'How do I prevent this from spreading?', desc: 'Containment & sanitation' },
+                    { q: 'Can this disease affect nearby plants?', desc: 'Cross-infection risks' },
+                    { q: 'How long does recovery usually take?', desc: 'Prognosis & growth timeline' },
+                  ].map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSendMessage(item.q)}
+                      className="w-full text-left p-2.5 rounded-lg bg-white hover:bg-[#F2EFE8] border border-[#DDD8CA] hover:border-[#193B28] transition-colors text-xs text-[#204B34] flex items-center justify-between group cursor-pointer"
+                    >
+                      <div>
+                        <span className="font-semibold block">{item.q}</span>
+                        <span className="text-[10px] text-[#637267]">{item.desc}</span>
+                      </div>
+                      <ArrowRight className="w-3 h-3 text-[#7A8F80] group-hover:text-[#193B28] shrink-0" />
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Quick Diagnostic Presets */}
-            <div className="pt-2 border-t border-[#E8E4D9]">
-              <span className="text-xs font-semibold text-[#57665C] block mb-2">
-                Simulate Photo Diagnostic:
+            {/* Tips for Best Results */}
+            <div className="pt-2 border-t border-[#E8E4D9] space-y-2">
+              <span className="text-xs font-semibold text-[#193B28] block flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-[#295C42]" />
+                <span>Tips for Accurate Diagnosis:</span>
               </span>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  onClick={() => {
-                    attachPresetImage('/src/assets/images/disease_early_blight_1793973952649.jpg');
-                    setInputText('Attached tomato leaf with concentric brown spots and yellow edges. Please identify.');
-                  }}
-                  className="p-2 text-left bg-white border border-[#DDD8CA] rounded-lg hover:border-[#193B28] transition-colors flex items-center gap-1.5 cursor-pointer"
-                >
-                  <ImageIcon className="w-3.5 h-3.5 text-[#3B7E58] shrink-0" />
-                  <span className="truncate">Tomato Leaf Sample</span>
-                </button>
-                <button
-                  onClick={() => {
-                    attachPresetImage('/src/assets/images/crop_rice_paddy_1793973980096.jpg');
-                    setInputText('Examining rice leaf tips with water-soaked wavy lesions under cloudy weather.');
-                  }}
-                  className="p-2 text-left bg-white border border-[#DDD8CA] rounded-lg hover:border-[#193B28] transition-colors flex items-center gap-1.5 cursor-pointer"
-                >
-                  <ImageIcon className="w-3.5 h-3.5 text-[#3B7E58] shrink-0" />
-                  <span className="truncate">Rice Paddy Sample</span>
-                </button>
-              </div>
+              <ul className="text-xs text-[#526257] space-y-1.5 bg-[#FAF8F2] p-3 rounded-xl border border-[#E5DFD0]">
+                <li className="flex items-start gap-1.5">
+                  <span className="font-bold text-[#193B28]">1.</span>
+                  <span>Name the affected crop clearly.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="font-bold text-[#193B28]">2.</span>
+                  <span>Describe spot color, rings, or wilting.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="font-bold text-[#193B28]">3.</span>
+                  <span>Attach leaf photos using the paperclip.</span>
+                </li>
+              </ul>
             </div>
 
             {/* Supported Crops Tag List */}
@@ -669,7 +601,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                 {['Tomato', 'Rice', 'Wheat', 'Potato', 'Maize', 'Cotton', 'Sugarcane', 'Groundnut', 'Chilli', 'Onion', 'Soybean', 'Mango', 'Banana', 'Brinjal'].map((c) => (
                   <button
                     key={c}
-                    onClick={() => handleSendMessage(`What are the primary diseases, pests, and growing requirements for ${c}?`)}
+                    onClick={() => setInputText(`What are the primary diseases, pests, and growing requirements for ${c}?`)}
                     className="px-2 py-0.5 rounded bg-white border border-[#DDD8CA] text-[#293A2E] hover:border-[#193B28] transition-colors cursor-pointer"
                   >
                     {c}
@@ -717,7 +649,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
             </svg>
             <div className="mt-1 flex items-center justify-between text-xs text-[#2A4D35] font-medium">
               <span>AgroAI Neural Agronomist</span>
-              <span>Gemini 3.8 Flash</span>
+              <span>Gemini 3.5 Flash Lite</span>
             </div>
           </div>
         </div>
@@ -775,18 +707,25 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                 )}
               </button>
 
-              {/* Report PDF Button */}
-              <button
-                onClick={() => {
-                  setActiveReportDiseaseId('early-blight-tomato');
-                  setIsReportModalOpen(true);
-                }}
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-[#193B28] hover:bg-[#11281B] rounded-lg transition-colors cursor-pointer shadow-xs"
-                title="Generate diagnosis report PDF"
-              >
-                <FileText className="w-3.5 h-3.5 text-[#A3C5A7]" />
-                <span className="hidden sm:inline">Report PDF</span>
-              </button>
+              {/* Report PDF Button (Active when a diagnosis exists) */}
+              {messages.some((m) => m.diagnosisCard) && (
+                <button
+                  onClick={() => {
+                    const lastCard = messages.slice().reverse().find((m) => m.diagnosisCard)?.diagnosisCard;
+                    if (lastCard?.diseaseId && lastCard.diseaseId !== 'photo-sample') {
+                      setActiveReportDiseaseId(lastCard.diseaseId);
+                    } else {
+                      setActiveReportDiseaseId(undefined);
+                    }
+                    setIsReportModalOpen(true);
+                  }}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-[#193B28] hover:bg-[#11281B] rounded-lg transition-colors cursor-pointer shadow-xs"
+                  title="Generate diagnosis report PDF"
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#A3C5A7]" />
+                  <span className="hidden sm:inline">Report PDF</span>
+                </button>
+              )}
 
               <button
                 onClick={handleClear}
@@ -800,8 +739,79 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
           </div>
 
           {/* Conversation Stream */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
-            {messages.map((msg) => (
+          <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col">
+            {messages.length === 0 ? (
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-6 sm:p-12 select-none my-auto max-w-lg mx-auto space-y-6">
+                {/* Subtle agricultural emblem / AgroAI branding */}
+                <div className="relative">
+                  <div className="w-20 h-20 rounded-2xl bg-[#E8EFE9] border border-[#BCD1C0] flex items-center justify-center shadow-xs">
+                    <Sprout className="w-10 h-10 text-[#204B34]" />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#193B28] text-white flex items-center justify-center shadow-2xs">
+                    <Sparkles className="w-3.5 h-3.5 text-[#88C498]" />
+                  </div>
+                </div>
+
+                {/* Required Heading and Subtitle */}
+                <div className="space-y-2">
+                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#142A1D] tracking-tight">
+                    How can I help your crops?
+                  </h2>
+                  <p className="text-sm sm:text-base text-[#49584E] leading-relaxed">
+                    Describe your crop's symptoms or upload a plant image to get started.
+                  </p>
+                </div>
+
+                {/* Subtle agricultural field illustration */}
+                <svg
+                  className="w-64 h-12 text-[#9EBFA5] opacity-50"
+                  viewBox="0 0 240 40"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 32 C 60 18, 120 38, 180 22 C 200 16, 220 25, 230 28"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M30 35 C 80 25, 140 35, 200 28"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    strokeDasharray="3 3"
+                  />
+                  <circle cx="80" cy="24" r="2.5" fill="currentColor" />
+                  <circle cx="140" cy="30" r="2.5" fill="currentColor" />
+                  <circle cx="195" cy="24" r="2.5" fill="currentColor" />
+                </svg>
+
+                {/* Suggested prompt starters (click to populate input field, does not auto-send) */}
+                <div className="w-full pt-1 space-y-2.5">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#68786E] block">
+                    Example symptom descriptions:
+                  </span>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {[
+                      'Yellowing leaves with brown spots on tomato',
+                      'Brown lesions on rice leaf tips',
+                      'Wilting and upward leaf curl in chilli',
+                      'Powdery white coating on cucumber leaves',
+                    ].map((example, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setInputText(example)}
+                        className="text-xs px-3.5 py-1.5 rounded-full bg-white hover:bg-[#EFECE3] border border-[#DDD7C9] text-[#243B2C] hover:border-[#204B34] transition-all cursor-pointer shadow-2xs text-left"
+                      >
+                        {example}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex gap-3.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -949,7 +959,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                   </div>
                 )}
               </div>
-            ))}
+            )))}
 
             {isTyping && (
               <div className="flex gap-3.5 items-center text-xs text-[#5D6D63]">
@@ -988,28 +998,30 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
             </div>
           )}
 
-          {/* Quick Follow-up Inquiries Bar */}
-          <div className="px-4 py-2 bg-[#FAF8F2] border-t border-[#EDE8DB] flex items-center gap-2 overflow-x-auto scrollbar-none text-xs">
-            <span className="text-[#64746A] font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
-              <Sparkles className="w-3.5 h-3.5 text-[#295C42]" />
-              Follow-Up:
-            </span>
-            {[
-              { label: 'What should I do first?', q: 'What should I do first?' },
-              { label: 'Prevent spreading', q: 'How do I prevent this from spreading?' },
-              { label: 'Affect nearby plants?', q: 'Can this disease affect nearby plants?' },
-              { label: 'Recovery timeline', q: 'How long does recovery usually take?' },
-            ].map((item, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleSendMessage(item.q)}
-                className="px-2.5 py-1 rounded-full bg-white hover:bg-[#EFECE3] border border-[#DDD8CA] text-[#204B34] font-medium whitespace-nowrap transition-colors cursor-pointer shrink-0"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
+          {/* Quick Follow-up Inquiries Bar (only during active conversation) */}
+          {messages.length > 0 && (
+            <div className="px-4 py-2 bg-[#FAF8F2] border-t border-[#EDE8DB] flex items-center gap-2 overflow-x-auto scrollbar-none text-xs">
+              <span className="text-[#64746A] font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
+                <Sparkles className="w-3.5 h-3.5 text-[#295C42]" />
+                Follow-Up:
+              </span>
+              {[
+                { label: 'What should I do first?', q: 'What should I do first?' },
+                { label: 'Prevent spreading', q: 'How do I prevent this from spreading?' },
+                { label: 'Affect nearby plants?', q: 'Can this disease affect nearby plants?' },
+                { label: 'Recovery timeline', q: 'How long does recovery usually take?' },
+              ].map((item, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleSendMessage(item.q)}
+                  className="px-2.5 py-1 rounded-full bg-white hover:bg-[#EFECE3] border border-[#DDD8CA] text-[#204B34] font-medium whitespace-nowrap transition-colors cursor-pointer shrink-0"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Bottom Chat Input Bar */}
           <div className="p-4 bg-[#FAF8F2] border-t border-[#E7E2D5]">
@@ -1041,7 +1053,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Describe crop symptoms... (e.g. 'My chilli leaves are curling upward', 'yellow spots on wheat')"
+                  placeholder="Describe your crop problem..."
                   className="w-full px-4 py-3 rounded-full bg-white border border-[#DCD5C6] focus:border-[#204B34] focus:ring-2 focus:ring-[#204B34]/15 focus:outline-none text-sm text-[#1A261F] placeholder-[#859489] transition-all"
                 />
               </div>
