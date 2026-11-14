@@ -115,7 +115,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Tomato', 'Potato', 'Petunia', 'Hairy nightshade'],
     type: 'Oomycete',
     confidenceMatch: 'High Alert • Fast Spread',
-    thumbnailUrl: '/src/assets/images/disease_early_blight_1793973952649.jpg',
+    thumbnailUrl: '/src/assets/images/tomato_late_blight.jpg',
     summary: 'Rapidly spreading dark water-soaked patches on leaves with white fuzzy fungal mold on undersides during humid weather.',
     detailedDescription:
       'Late blight is a devastating oomycete infection capable of destroying whole tomato and potato fields within days. Lesions start as pale green to dark water-soaked patches that turn brown and papery. In high humidity, a distinctive white downy mold appears on the underside of leaves.',
@@ -205,7 +205,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Tomato', 'Pepper', 'Bean', 'Tobacco', 'Weeds (Datura, Malva)'],
     type: 'Viral',
     confidenceMatch: 'Likely Match • 88%',
-    thumbnailUrl: '/src/assets/images/category_vegetables_tomato_1793973953351.jpg',
+    thumbnailUrl: '/src/assets/images/tomato_yellow_leaf_curl.jpg',
     summary: 'Viral disease causing dramatic upward cupping of leaves, yellow interveinal chlorosis, and bushy severe stunting.',
     detailedDescription:
       'Tomato Yellow Leaf Curl Virus (TYLCV) is a devastating begomovirus transmitted exclusively by the silverleaf whitefly (Bemisia tabaci). Infected plants exhibit small curled leaves, severe internode shortening, and near-complete flower drop.',
@@ -292,7 +292,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Tomato', 'Pepper', 'Solanaceous weeds'],
     type: 'Bacterial',
     confidenceMatch: 'Likely Match • 85%',
-    thumbnailUrl: '/src/assets/images/category_vegetables_tomato_1793973953351.jpg',
+    thumbnailUrl: '/src/assets/images/tomato_bacterial_canker.jpg',
     summary: 'Systemic vascular browning, wilting on one side of leaf, and characteristic white bird’s-eye spots with dark centers on fruit.',
     detailedDescription:
       'Bacterial canker is a highly infectious seed- and tool-transmitted vascular disease. Bacteria colonize xylem vessels, producing unilateral wilting of leaflets, necrotic marginal leaf firing, and distinctive white raised spots with dark centers (birds-eye spots) on developing fruit.',
@@ -467,7 +467,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Rice', 'Barley', 'Millet', 'Grasses'],
     type: 'Fungal',
     confidenceMatch: 'Likely Match • 89%',
-    thumbnailUrl: '/src/assets/images/crop_rice_paddy_1793973980096.jpg',
+    thumbnailUrl: '/src/assets/images/rice_blast.jpg',
     summary: 'Causes spindle-shaped diamond lesions on leaves and neck rot that prevents grain filling.',
     detailedDescription:
       'Rice blast is one of the most destructive cereal diseases worldwide. It infects seedlings, tillers, nodes, and panicle necks (neck blast). Leaf spots have grey/white centers with brown to purple borders resembling diamonds or spindles.',
@@ -554,7 +554,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Rice', 'Wild Oryza species', 'Leersia grasses'],
     type: 'Bacterial',
     confidenceMatch: 'Likely Match • 86%',
-    thumbnailUrl: '/src/assets/images/crop_rice_paddy_1793973980096.jpg',
+    thumbnailUrl: '/src/assets/images/bacterial-blight-of-rice.jpg',
     summary: 'Water-soaked wavy lesions starting from leaf tips moving downwards, turning yellow-white with amber bacterial ooze droplets.',
     detailedDescription:
       'Bacterial Leaf Blight (BLB) is a destructive vascular disease caused by Xanthomonas oryzae. Lesions typically start at leaf tips as water-soaked stripes, develop wavy irregular margins, and turn straw-white. In the early morning, milky to amber bacterial ooze beads emerge from leaf surfaces.',
@@ -638,7 +638,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Rice', 'Maize', 'Soybean', 'Sorghum'],
     type: 'Fungal',
     confidenceMatch: 'Likely Match • 87%',
-    thumbnailUrl: '/src/assets/images/crop_rice_paddy_1793973980096.jpg',
+    thumbnailUrl: '/src/assets/images/sheath-blight-rice.jpg',
     summary: 'Greenish-grey oval spots on leaf sheaths near water line with distinct dark brown borders, causing lodging.',
     detailedDescription:
       'Sheath blight, caused by Rhizoctonia solani, thrives in high-density, heavily fertilized rice crops. Infection begins at the water line as oval, water-soaked greenish-grey lesions that band together, girdle the culm, and cause severe lodging.',
@@ -718,7 +718,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Wheat', 'Barley', 'Rye', 'Wild grasses'],
     type: 'Fungal',
     confidenceMatch: 'Likely Match • 90%',
-    thumbnailUrl: '/src/assets/images/category_cereals_wheat_1793973953040.jpg',
+    thumbnailUrl: '/src/assets/images/stripe_rust_wheat.jpg',
     summary: 'Bright yellow to orange powdery pustules arranged in parallel linear stripes along leaf veins.',
     detailedDescription:
       'Yellow or stripe rust is an airborne obligate fungal biotroph that attacks wheat foliage during cool spring or winter seasons. The vivid yellow-orange urediniospores form unmistakable parallel stripes between leaf veins, causing desiccation and shriveled grains.',
@@ -802,7 +802,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Wheat', 'Triticale', 'Goatgrass'],
     type: 'Fungal',
     confidenceMatch: 'Likely Match • 88%',
-    thumbnailUrl: '/src/assets/images/category_cereals_wheat_1793973953040.jpg',
+    thumbnailUrl: '/src/assets/images/wheat_leaf_rust.jpg',
     summary: 'Small round to oval orange-brown powdery pustules scattered randomly on upper leaf surfaces.',
     detailedDescription:
       'Brown or leaf rust is the most widely distributed wheat rust globally. Unlike stripe rust, its pustules are circular to oval, reddish-brown, and scattered randomly across the upper leaf surface rather than forming linear stripes.',
@@ -878,7 +878,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Wheat', 'Barley'],
     type: 'Fungal',
     confidenceMatch: 'Likely Match • 85%',
-    thumbnailUrl: '/src/assets/images/category_cereals_wheat_1793973953040.jpg',
+    thumbnailUrl: '/src/assets/images/powdery_mildew.jpg',
     summary: 'White fluffy powdery fungal patches on leaves and stems, turning dull grey with tiny black specks.',
     detailedDescription:
       'Wheat powdery mildew is favored by lush, dense canopies receiving high nitrogen fertilization. It appears as superficial white fluffy cottony colonies that turn grey-brown with embedded dark cleistothecia.',
@@ -954,7 +954,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Maize', 'Sorghum', 'Rice', 'Sugarcane', 'Cotton'],
     type: 'Pest',
     confidenceMatch: 'Likely Match • 93%',
-    thumbnailUrl: '/src/assets/images/crop_maize_corn_1793973996197.jpg',
+    thumbnailUrl: '/src/assets/images/fall_armyworm.jpg',
     summary: 'Ragged feeding holes, windowpaning on young leaves, and abundant sawdust-like frass inside central whorls.',
     detailedDescription:
       'Fall Armyworm (FAW) is an aggressive, invasive moth pest. Young larvae scrape leaf tissue ("windowpaning"), while older instars burrow deep into the central whorl, chewing extensive ragged holes and leaving moist, sawdust-like brownish excrement (frass).',
@@ -1041,7 +1041,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Maize', 'Sorghum', 'Sudangrass'],
     type: 'Fungal',
     confidenceMatch: 'Likely Match • 86%',
-    thumbnailUrl: '/src/assets/images/crop_maize_corn_1793973996197.jpg',
+    thumbnailUrl: '/src/assets/images/northern_corn.jpg',
     summary: 'Long, cigar-shaped elliptical grey-green to tan lesions on leaves that coalesce to cause extensive leaf death.',
     detailedDescription:
       'Northern Corn Leaf Blight (NCLB) is caused by Exserohilum turcicum. It forms long (3–15 cm), cigar-shaped elliptical tan lesions with smooth margins. Under damp conditions, dark olive-grey fungal spores form within lesions.',
@@ -1117,7 +1117,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Cotton (Gossypium hirsutum, G. barbadense)'],
     type: 'Bacterial',
     confidenceMatch: 'Likely Match • 86%',
-    thumbnailUrl: '/src/assets/images/category_cash_cotton_1793973979904.jpg',
+    thumbnailUrl: '/src/assets/images/angular.jpg',
     summary: 'Water-soaked angular leaf spots bounded by veinlets, dark lesions on stems ("black arm"), and rotting bolls.',
     detailedDescription:
       'Bacterial blight of cotton attacks all aerial plant parts. Foliar lesions appear angular because they are restricted by leaf veinlets. Systemic infection down petioles causes black, girdled stems known as "black arm", and sunken water-soaked spots on green bolls.',
@@ -1200,7 +1200,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Cotton', 'Okra', 'Hibiscus', 'Weeds (Abutilon, Sida)'],
     type: 'Viral',
     confidenceMatch: 'Likely Match • 89%',
-    thumbnailUrl: '/src/assets/images/category_cash_cotton_1793973979904.jpg',
+    thumbnailUrl: '/src/assets/images/leaf_curl.jpg',
     summary: 'Upward or downward leaf curling, vein thickening, small leaf-like enations on undersides, and extreme stunting.',
     detailedDescription:
       'Cotton Leaf Curl Virus (CLCuD) is a devastating viral disease transmitted by the whitefly (Bemisia tabaci). Distinctive diagnostic symptoms include thickening of the primary veins, upward or downward leaf curling, and the formation of cup-shaped or leaf-like green outgrowths (enations) on leaf undersides.',
@@ -1283,7 +1283,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Chilli', 'Bell pepper', 'Tomato', 'Eggplant'],
     type: 'Fungal',
     confidenceMatch: 'Likely Match • 91%',
-    thumbnailUrl: '/src/assets/images/crop_chilli_pepper_1793973997457.jpg',
+    thumbnailUrl: '/src/assets/images/anthracnose.jpg',
     summary: 'Circular sunken lesions on ripe pods with concentric rings of black dots (acervuli), and twig dieback from tip downward.',
     detailedDescription:
       'Anthracnose is the most devastating fruit disease in chilli production. It causes dark, circular, sunken necrotic lesions on ripening and mature green fruits. Concentric rings of salmon-pink or black fungal fruiting bodies (acervuli) appear inside the lesion. Twigs die back from the tip downward.',
@@ -1369,7 +1369,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Chilli', 'Capsicum', 'Tomato', 'Tobacco'],
     type: 'Viral',
     confidenceMatch: 'Likely Match • 87%',
-    thumbnailUrl: '/src/assets/images/crop_chilli_pepper_1793973997457.jpg',
+    thumbnailUrl: '/src/assets/images/chilli_curl.jpg',
     summary: 'Upward leaf curling, puckering, reduction of leaf size, vein thickening, and severe bushy stunting.',
     detailedDescription:
       'Chilli Leaf Curl is transmitted by the whitefly (Bemisia tabaci) and thrips. Leaves curl upward boat-like, become leathery and crinkled, with shortened internodes resulting in severe bushy stunting and near-total yield collapse.',
@@ -1446,7 +1446,7 @@ export const DISEASE_DATABASE: Record<string, Disease> = {
     affectedCrops: ['Soybean', 'Mung bean', 'Urad bean', 'Cowpea'],
     type: 'Viral',
     confidenceMatch: 'Likely Match • 88%',
-    thumbnailUrl: '/src/assets/images/crop_soybean_field_1793974012866.jpg',
+    thumbnailUrl: '/src/assets/images/ymv.jpg',
     summary: 'Bright yellow patches alternating with green on leaflets, stunted growth, and empty flat pods.',
     detailedDescription:
       'Yellow Mosaic Virus is a major threat to leguminous crops across Asia and Africa. Transmitted by the whitefly (Bemisia tabaci), it creates irregular bright yellow patches that coalesce until entire leaves turn golden yellow, severely restricting photosynthesis and pod filling.',
